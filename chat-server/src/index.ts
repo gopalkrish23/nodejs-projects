@@ -25,13 +25,23 @@ const server = app.listen(process.env.SERVER_PORT, () => {
 
 const io = new Server(server)
 
+let globalUsers = global as typeof globalThis & {
+    chatUsers: Map<string, string>;
+}
+globalUsers.chatUsers = new Map();
+
 io.on("connection", (socket) => {
     console.log("NEWCONN:", socket.id)
+    globalUsers.chatUsers.set(socket.id, socket.id);
     socket.on("disconnect", () => {
         console.log("DISCONN:", socket.id)
+        globalUsers.chatUsers.delete(socket.id);
     })
     socket.on("new message", (msg) => {
-        console.log("NEWMESS:", socket.id)
-        io.emit("incoming msg", msg);
+        console.log("NEWMESS:", socket.id);
+        const to_user = Array.from(globalUsers.chatUsers.keys()).find(key => key != socket.id);
+
+        if(to_user && globalUsers.chatUsers.get(to_user))
+            socket.to(to_user).emit("incoming msg", msg);
     })
 })

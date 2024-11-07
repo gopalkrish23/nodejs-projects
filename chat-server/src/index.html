@@ -46,9 +46,6 @@
             #messages > li {
                 padding: 0.5rem 1rem;
             }
-            #messages > li:nth-child(odd) {
-                background: #efefef;
-            }
         </style>
     </head>
     <body>
@@ -60,6 +57,16 @@
         <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
         <script>
             var socket = io();
+            function appendMessage(msg, isSelf){
+                var newMsg = document.createElement("li");
+                if(isSelf) {
+                    newMsg.style.textAlign = "right";
+                    newMsg.style.background = "#efefef";
+                }
+                newMsg.textContent = msg;
+                messages.appendChild(newMsg)
+                window.scrollTo(0, document.body.scrollHeight)
+            }
 
             var form = document.getElementById("form")
             var input = document.getElementById("input")
@@ -68,16 +75,13 @@
                 event.preventDefault();
                 if(input.value) {
                     socket.emit("new message", input.value);
+                    appendMessage(input.value, true);
                     input.value = '';
                 }
             })
 
             socket.on("incoming msg", (msg) => {
-                console.log("incoming on ui", msg)
-                var newMsg = document.createElement("li");
-                newMsg.textContent = msg;
-                messages.appendChild(newMsg)
-                window.scrollTo(0, document.body.scrollHeight)
+                appendMessage(msg);
             })
         </script>
     </body>
