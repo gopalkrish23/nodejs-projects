@@ -1,0 +1,16 @@
+{
+  "name": "sam",
+  "version": "1.0.0",
+  "main": "check_crypto_multi_threading.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node check_crypto_multi_threading"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
