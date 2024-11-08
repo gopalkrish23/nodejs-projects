@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { addMessage, fetchMessages } from "../../controllers/messages"
+import { addMessage, fetchMessages } from "../controllers/messages"
 
 const router = Router();
 router.get("/", fetchMessages)
